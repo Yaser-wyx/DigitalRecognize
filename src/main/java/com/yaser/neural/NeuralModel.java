@@ -37,6 +37,7 @@ public class NeuralModel implements Serializable {
             NeuralModel model = new NeuralModel(neuralNet);
             ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(path));
             os.writeObject(model);
+            os.close();
         } catch (IOException e) {
             e.printStackTrace();
             return false;//序列化失败

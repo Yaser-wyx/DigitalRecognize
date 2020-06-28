@@ -5,7 +5,7 @@
 
 package com.yaser.neural;
 
-import com.yaser.DigitalModel;
+import com.yaser.train_model.DigitalModel;
 import com.yaser.utils.math.ActivationFn;
 import com.yaser.utils.math.LossFn;
 import com.yaser.utils.math.Matrix;
@@ -28,6 +28,14 @@ public class NeuralNet {
         this(inputNum, outputNum, hiddenLayerNum, new Sigmoid(), null);
     }
 
+    /**
+     *
+     * @param inputNum 输入层神经元个数
+     * @param outputNum 输出层神经元个数
+     * @param hiddenLayerNum 隐藏层个数
+     * @param activeFn 激活函数
+     * @param perHiddenNeuronsNum 每一个隐藏层神经元个数
+     */
     public NeuralNet(final int inputNum, final int outputNum, final int hiddenLayerNum, final ActivationFn activeFn, final int[] perHiddenNeuronsNum) {
         ActivationFn[] activationFns = new ActivationFn[hiddenLayerNum + 1];
         Arrays.fill(activationFns, activeFn);
@@ -41,7 +49,7 @@ public class NeuralNet {
             this.perHiddenNeuronsNum = new int[hiddenLayerNum];
             Arrays.fill(this.perHiddenNeuronsNum, (int) ((inputNum + outputNum) * 1.5));
         }
-        this.initNetWork();
+        this.buildNetWork();
     }
 
     public NeuralNet(final int inputNum, final int outputNum, final int hiddenLayerNum, final ActivationFn[] activationFns) {
@@ -49,7 +57,7 @@ public class NeuralNet {
         this.outputNum = outputNum;
         this.hiddenLayerNum = hiddenLayerNum;
         this.activationFns = activationFns;
-        this.initNetWork();
+        this.buildNetWork();
     }
 
     /**
@@ -82,8 +90,10 @@ public class NeuralNet {
         }
     }
 
-
-    private void initNetWork() {
+    /**
+     * @description 根据输入的神经网络参数，来自动构建一个神经网络
+     */
+    private void buildNetWork() {
         //创建输入神经层
         NeuronsLayer inputLayer = new NeuronsLayer(inputNum, LayerType.INPUT, null);
         neuronsLayers.add(inputLayer);
@@ -91,23 +101,27 @@ public class NeuralNet {
         int hiddenIndex = 0;
         //创建隐藏层
         for (int i = 0; i < hiddenLayerNum; i++) {
-            NeuronsLayer hiddenLayer = new NeuronsLayer(this.perHiddenNeuronsNum[hiddenIndex++], activationFns[activationFnIndex++]);
+            NeuronsLayer hiddenLayer =
+                    new NeuronsLayer(this.perHiddenNeuronsNum[hiddenIndex++],
+                            activationFns[activationFnIndex++]);
             neuronsLayers.add(hiddenLayer);
         }
         //创建输出层
-        NeuronsLayer outLayer = new NeuronsLayer(outputNum, LayerType.OUTPUT, activationFns[activationFnIndex]);
+        NeuronsLayer outLayer =
+                new NeuronsLayer(outputNum, LayerType.OUTPUT, activationFns[activationFnIndex]);
         neuronsLayers.add(outLayer);
 
         //进行网络连接操作
         for (int layerIndex = 0; layerIndex < neuronsLayers.size() - 1; layerIndex++) {
-            NeuronsLayer.connectLayer(neuronsLayers.get(layerIndex), neuronsLayers.get(layerIndex + 1));//将前后两层神经网络相连接
+            NeuronsLayer.connectLayer(neuronsLayers.get(layerIndex),
+                    neuronsLayers.get(layerIndex + 1));//将前后两层神经网络相连接
         }
     }
 
     /**
      * @param inputMatrix      输入值
      * @param realOutputMatrix 真实值
-     * @description 使用所有样本进行训练
+     * @description 使用所输入的样本进行训练
      */
     private void train(final Matrix inputMatrix, final Matrix realOutputMatrix) {
         NeuronsLayer inputLayer = this.neuronsLayers.get(0);

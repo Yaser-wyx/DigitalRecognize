@@ -18,7 +18,7 @@ public class LayerWeights {
     public LayerWeights(NeuronsLayer preLayer, NeuronsLayer nextLayer) {
         this.preLayer = preLayer;
         this.nextLayer = nextLayer;
-        this.initialWeights();
+        this.initWeights();
     }
 
     public LayerWeights(NeuronsLayer preLayer, NeuronsLayer nextLayer, double[][] weightValue) {
@@ -31,7 +31,7 @@ public class LayerWeights {
     /**
      * @description 进行连接权重的初始化工作，初始化使用高斯分布
      */
-    private void initialWeights() {
+    private void initWeights() {
         int preNum = preLayer.getNeuronNum();
         int nextNum = nextLayer.getNeuronNum();
         double[][] initialMatrix = new double[nextNum][preNum];

@@ -21,12 +21,21 @@ public class Matrix {
         this.value = new double[row][column];
     }
 
+    /**
+     *
+     * @param value 矩阵的值
+     */
     public Matrix(double[][] value) {
         this.row = value.length;
         this.column = value[0].length;
         this.value = value;
     }
 
+    /**
+     *
+     * @param originMatrix 要复制的矩阵
+     * @return 返回一个完全拷贝的矩阵
+     */
     public static Matrix copyMatrix(Matrix originMatrix) {
         double[][] targetMatrixValue = new double[originMatrix.row][originMatrix.column];
         for (int i = 0; i < originMatrix.row; i++) {

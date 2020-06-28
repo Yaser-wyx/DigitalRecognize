@@ -102,7 +102,7 @@ public class NeuronsLayer {
 
     /**
      * @param outputMatrix 训练结果集
-     * @description 计算神经元误差，只可用于输出层的神经元
+     * @description 反向传播，计算神经元误差，只可用于输出层的神经元
      */
     public void calErrorDelta(Matrix outputMatrix) {
         assert this.layerType == LayerType.OUTPUT;
@@ -115,7 +115,7 @@ public class NeuronsLayer {
     }
 
     /**
-     * @description 计算神经元误差，只可用于隐藏层
+     * @description 反向传播，计算神经元误差，只可用于隐藏层
      */
     public void calErrorDelta() {
         assert this.layerType == LayerType.HIDDEN;
